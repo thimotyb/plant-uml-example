@@ -1,0 +1,16 @@
+@startuml
+actor Customer as C
+participant "WebApp" as UI
+participant "OrderService" as OS
+participant "ShipmentService" as SS
+participant "Carrier API" as Carrier
+
+C -> UI : View order status(id)
+UI -> OS : getOrder(id)
+OS --> UI : Order{status, tracking}
+UI -> SS : getShipment(tracking)
+SS -> Carrier : GET /shipments/{tracking}
+Carrier --> SS : {status: IN_TRANSIT, lastUpdate: ...}
+SS --> UI : Shipment status
+UI --> C : Show status: "In transit"
+@enduml
