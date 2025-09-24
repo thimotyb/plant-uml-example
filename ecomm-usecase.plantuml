@@ -1,0 +1,31 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+
+actor "Customer" as Customer
+actor "Payment Gateway" as PG
+actor "Carrier" as Carrier
+
+rectangle "E-Commerce System" as Sys {
+  usecase "Sign up / Login" as UC_Login
+  usecase "Browse catalog" as UC_Browse
+  usecase "Add to cart" as UC_Add
+  usecase "Checkout" as UC_Checkout
+  usecase "Pay order" as UC_Pay
+  usecase "Track order" as UC_Track
+}
+
+Customer --> UC_Login
+Customer --> UC_Browse
+Customer --> UC_Add
+Customer --> UC_Checkout
+Customer --> UC_Pay
+Customer --> UC_Track
+
+UC_Pay --> PG : integrate API
+UC_Track --> Carrier : fetch shipment status
+
+UC_Checkout .> UC_Add : <<include>>
+UC_Pay .> UC_Checkout : <<extend>>  # optional post-checkout payment
+
+@enduml
