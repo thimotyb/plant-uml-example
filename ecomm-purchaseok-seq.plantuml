@@ -1,0 +1,20 @@
+@startuml
+actor Customer as C
+participant "WebApp" as UI
+participant "Cart" as Cart
+participant "Payment Gateway" as PG
+participant "OrderService" as OS
+participant "ShipmentService" as SS
+
+C -> UI : click "Checkout"
+UI -> Cart : total()
+Cart --> UI : total
+UI -> PG : authorize(amount, token)
+PG --> UI : AuthResult(OK, paymentId)
+UI -> OS : placeOrder(cart, paymentId)
+OS --> UI : Order{id, status=PAID}
+UI -> SS : createShipment(orderId)
+SS --> UI : Shipment{trackingCode}
+UI --> C : show confirmation + tracking
+
+@enduml
